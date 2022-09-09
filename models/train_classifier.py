@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
 
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
 
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -92,7 +93,11 @@ def build_model():
         ('model', MultiOutputClassifier(RandomForestClassifier()))
     ])
 
-    return pipeline
+    parameters = {'model__estimator__n_estimators': [50, 100]}
+
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=3)
+
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
